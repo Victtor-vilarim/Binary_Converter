@@ -1,0 +1,20 @@
+[project]
+name = 'binary_converter'
+version = '0.1.0a1.dev1'
+description = 'Um simples conversor bínario'
+authors = [{ name = 'Victtor Vilarim' }]
+
+dependencies = []
+
+readme = 'README.md'
+
+keywords = []
+
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Other Audience',
+    'Natural Language :: Portuguese (Brazilian)',
+]
+
+[project.optional-dependencies]
+test = 'pytest'
