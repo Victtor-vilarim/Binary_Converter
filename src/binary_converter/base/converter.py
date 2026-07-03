@@ -2,45 +2,36 @@ from binary_converter import config
 
 
 class Converter:
-    def __init__(self):
-        self.upper_letters: dict[str, int] = config.UPPER_LETTERS
-        self.lower_letters: dict[str, int] = config.LOWER_LETTERS
 
     @staticmethod
-    def _raw_text_split(bytes_: str) -> list[str]:
-        return bytes_.split()
-
-    def to_decimal(self, bytes_: str) -> list[int]:
-        raw_letters = self._raw_text_split(bytes_)
+    def binary_to_decimal(bytes_: str) -> list[int]:
+        bytes_ = bytes_.split()
         dec_list = []
-        for letter in raw_letters:
+        for byte_ in bytes_:
             dec = 0
-            for i, bit in enumerate(letter):
-                dec += int(bit) * 2 ** (abs(i - (len(letter) - 1)))
+            for i, bit in enumerate(byte_):
+                dec += int(bit) * 2 ** (abs(i - (config.ASCII_BYTE_SIZE - 1)))
             dec_list.append(dec)
 
         return dec_list
 
-    def _check_case(self, value: int) -> dict[str, int] | None:
-        if 65 <= value <= 90:
-            return self.upper_letters
-        elif 97 <= value <= 122:
-            return self.lower_letters
-        return None
-
-    def to_letter(self, text: str) -> list[str]:
-        values = self.to_decimal(text)
-        letters = []
-        for value in values:
-            btw = self._check_case(value)
-            for item in btw.items():
-                if value == item[1]:
-                    letters.append(item[0])
-
-        return letters
-
-    def to_text(self, num: str) -> str:
+    @classmethod
+    def to_text(cls, bytes_: str) -> str:
         text = ''
-        for letter in self.to_letter(num):
-            text += letter
+        for num in cls.binary_to_decimal(bytes_):
+            text += chr(num)
         return text
+
+    @staticmethod
+    def letter_to_decimal(text: str) -> list[int]:
+        return [ord(letter) for letter in text]
+
+    @classmethod
+    def to_binary(cls, text: str) -> str:
+        nums = cls.letter_to_decimal(text)
+        bytes_ = ''
+        for num in nums:
+            bytes_ += f'{num:b}'.rjust(config.ASCII_BYTE_SIZE, '0')
+            bytes_ += ' '
+
+        return bytes_[0:len(bytes_) - 1]
